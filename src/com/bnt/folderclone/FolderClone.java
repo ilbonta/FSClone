@@ -8,9 +8,18 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 
 public class FolderClone {
-	static final String HELP = "Uso: java -jar CopyAll \"path di input\" \"path di output\" [argomenti...]\r\n"
-			+ "dove gli argomenti sono:\r\n" + "    -v	           verbose: abilita i messaggi in console\r\n"
-			+ "    -d		   delete: se c'� elimina il percorso dove poi incoller� l'output\r\n";
+
+	static final String HELP = "" +
+            "Uso: java FolderClone" +
+            " \"input path\" " +
+            " \"output path\" " +
+            " [arguments...]\r\n"
+			+ "" +
+            "Arg:\r\n" + "    " +
+            "-h	       help\r\n" +
+            "-v	       verbose: verbose mode\r\n" +
+            "-d		   force delete output before clone\r\n" +
+            "";
                                    
 	                                                                            
 	public static void main(String[] args) throws IOException {
@@ -20,7 +29,7 @@ public class FolderClone {
 		boolean verbose = false;
 
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].equalsIgnoreCase("-help") || args.length < 2) {
+			if (args[i].equalsIgnoreCase("-h") || args.length < 2) {
 				System.out.println(HELP);
 				System.exit(0);
 			} else if (args[i].equals("-v")) {
@@ -31,7 +40,6 @@ public class FolderClone {
 		}
 
 		fc.cloneFS(args[0], args[1], verbose, delete);
-
 	}
 
     public void cloneFS(String input, String output, boolean verbose, boolean delete) throws IOException {
@@ -54,7 +62,7 @@ public class FolderClone {
             System.out.println(output);
             f.mkdirs();
         }
-        else {
+        else if(delete) {
             Path path = Paths.get(output);
             Files.walk(path)
                     .sorted(Comparator.reverseOrder())
@@ -68,10 +76,10 @@ public class FolderClone {
         Duplicate dup = new Duplicate();
         dup.walkin(input, output, verbose, "      ");
         System.out.println("\n----END without error----\n");
+
         if(verbose) {
             System.out.println("Copied "+Duplicate.countF+" File and "+Duplicate.countD+" Dir in "+(System.currentTimeMillis()-time)+" mls");
         }
-
     }
 }                                                                        
                                                                          
